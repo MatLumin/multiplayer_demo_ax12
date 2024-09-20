@@ -1,0 +1,22 @@
+
+<h1>
+	ADMIN PANEL BTW
+</h1>
+
+
+<script>
+async function get_players_report()
+	{
+	let resp = await fetch("/get_players_report_string");
+	let text = await resp.text();
+	document.getElementById("player_reports").innerText = text;
+	}
+</script>
+
+
+<pre id="player_reports">
+</pre>
+
+<script>
+setInterval(get_players_report, 1000)
+</script>

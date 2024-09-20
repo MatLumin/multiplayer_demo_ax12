@@ -1,0 +1,111 @@
+
+
+
+
+
+
+
+<script>
+/*
+GET /get_players_data HTTP/1.1
+Host: 127.0.0.1:5000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:130.0) Gecko/20100101 Firefox/130.0
+
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br, zstd
+Referer: http://127.0.0.1:5000/index
+DNT: 1
+Sec-GPC: 1
+Connection: keep-alive
+Sec-Fetch-Dest: empty
+Sec-Fetch-Mode: cors
+Sec-Fetch-Site: same-origin
+Priority: u=4
+*/
+
+
+async function lite_getch_get(url)
+	{
+	return await fetch(
+		url, 
+			{
+			"headers":
+				{
+				"User-Agent":"",
+				"Accept-Language":"",
+				"Accept-Encoding":"",
+				"DNT":"",
+				"Sec-GPC":"",
+				"Connection":"",
+				"Sec-Fetch-Dest":"",
+				"Sec-Fetch-Mode":"",
+				"Sec-Fetch-Site":"",
+				"Priority":""
+				}
+			}
+		);
+	}
+
+async function create_player()
+	{
+	let username = document.getElementById("username").value;
+	await lite_getch_get(`/create_player?username=${username}`);
+	}
+
+async function set_player_pos()
+	{
+	let username = document.getElementById("username").value;
+	let x = document.getElementById("x").value;
+	let z = document.getElementById("z").value;
+	let head_rot_x = document.getElementById("head_rot_x").value;
+	let head_rot_z = document.getElementById("head_rot_z").value;	
+	await lite_getch_get(`/set_player_pos?x=${x}&z=${z}&username=${username}&head_rot_x=${head_rot_x}&head_rot_z=${head_rot_z}`);
+	}
+
+
+async function get_all_players_data()
+	{
+	let resp = await fetch("get_players_data");
+	let text = await resp.text();
+	document.getElementById("players_data").innerText = `${text}`
+	}
+
+async function act_random_if_neeeded()
+	{
+	if (document.getElementById("should_act_random").value !== "do")
+		{
+		return
+		}
+	document.getElementById("x").value = Math.random() * 2000 - 1000;
+	document.getElementById("z").value = Math.random() * 2000 - 1000;
+	document.getElementById("head_rot_x").value = Math.random() * 2;
+	document.getElementById("head_rot_z").value = Math.random() * 2;
+	await set_player_pos();
+	}
+</script>
+
+
+<input id="username"> 
+<input onchange="" type="range" id="x"  min="-1000" max="+1000" value="50">
+<input onchange="" type="range" id="z"  min="-1000" max="+1000" value="50">
+<input onchange="" type="range" step="0.01" id="head_rot_x"  min="0" max="2" value="0">
+<input onchange="" type="range" step="0.01" id="head_rot_z"  min="0" max="2" value="0">
+
+<label>leave input belo empty to act not random</label>
+<input id="should_act_random" value="do">
+
+
+
+
+<p id="players_data"> </p>
+
+<script>
+
+document.getElementById("username").value = "MAT" + Math.round(Math.random()*1000).toString();
+create_player();	
+</script>
+
+<script>
+setInterval(act_random_if_neeeded,200);
+setInterval(get_all_players_data, 200);
+</script>
