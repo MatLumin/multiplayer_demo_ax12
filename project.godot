@@ -11,9 +11,10 @@ config_version=5
 [application]
 
 config/name="multiplayer_demo_ax12"
-run/main_scene="res://levels/main.tscn"
+run/main_scene="res://levels/entering_menu.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
-config/icon="res://icon.svg"
+boot_splash/image="res://splash_screen.png"
+config/icon="res://texture/logo.png"
 
 [input]
 
